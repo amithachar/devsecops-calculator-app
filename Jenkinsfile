@@ -9,7 +9,7 @@ pipeline {
     stages{
         stage('Git checkout'){
             steps{
-                git url: 'https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app.git', branch: 'main'
+                git url: 'https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app.git', branch: 'Test'
             }
         }
 
