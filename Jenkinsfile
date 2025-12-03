@@ -38,14 +38,11 @@ pipeline {
 
         stage('Mutation Testing') {
             steps {
-                // Run PIT mutation testing
                 sh 'mvn org.pitest:pitest-maven:mutationCoverage'
             }
             post {
                 always {
-                    // Archive PIT HTML/XML reports
                     archiveArtifacts artifacts: 'target/pit-reports/*', allowEmptyArchive: true
-                    // Optionally publish HTML report for better visualization
                     publishHTML([
                         reportDir: 'target/pit-reports', 
                         reportFiles: 'index.html', 
