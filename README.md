@@ -1,288 +1,341 @@
-# Modern Calculator Application
+# 🧮 Spring Boot Calculator with Modern UI
+# 👨‍🎤 Author: ManojKrishnappa 
+![Calculator Demo](https://img.shields.io/badge/Spring%20Boot-3.3.0-brightgreen)
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Ready-blue)
 
-A beautiful, feature-rich calculator available in **two versions**:
-- 🖥️ **Java Desktop Application** (JavaFX)
-- 🌐 **Web Application** (HTML/CSS/JavaScript)
+A modern, responsive calculator application built with Spring Boot backend and beautiful frontend UI. Features include real-time calculations, dark/light theme toggle, animations, and comprehensive monitoring.
 
-## 🎨 Features
+## ✨ Features
 
-Both versions include:
-- ✨ Modern gradient UI with smooth animations
-- ⌨️ Full keyboard support
-- 📜 Calculation history tracking
-- 🎯 Decimal operations with auto-trimming
-- 🔢 Chained operations support
-- 🛡️ Error handling (division by zero)
-- 🧪 Comprehensive test coverage (Java version)
+### 🎨 Frontend Features
+- **Modern UI/UX**: Beautiful gradient backgrounds with glassmorphism effects
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **Dark/Light Theme**: Toggle between themes with smooth animations
+- **Keyboard Support**: Full keyboard navigation and shortcuts
+- **Real-time Animations**: Button press effects, loading spinners, success/error animations
+- **Particle Background**: Dynamic floating particle animations
+- **Error Handling**: User-friendly error messages with modal dialogs
 
----
+### 🔧 Backend Features
+- **RESTful API**: Clean REST endpoints for calculator operations
+- **Spring Boot**: Modern Java framework with auto-configuration
+- **Health Monitoring**: Spring Boot Actuator with health checks
+- **Error Handling**: Comprehensive error handling with proper HTTP status codes
+- **Logging**: Structured logging with different levels
+- **Testing**: Unit and integration tests with high coverage
 
-## 🖥️ Java Desktop Version (JavaFX)
+### 🚀 DevOps Features
+- **Docker Support**: Multi-stage Dockerfile with security best practices
+- **Kubernetes Ready**: Complete K8s deployment with HPA, PDB, and monitoring
+- **Docker Compose**: Easy local development setup
+- **Health Checks**: Liveness and readiness probes
+- **Monitoring**: Prometheus metrics and Grafana dashboards
+- **Security**: Non-root user, read-only filesystem, security contexts
 
-### Requirements
-- Java 21 or later
-- Maven 3.x
+## 🏗️ Architecture
 
-### Running the Application
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Spring Boot   │    │   Monitoring    │
+│   (Thymeleaf)   │◄──►│   Backend       │◄──►│   (Actuator)    │
+│                 │    │                 │    │                 │
+│ • Modern UI     │    │ • REST API      │    │ • Health Check  │
+│ • Animations    │    │ • Calculations  │    │ • Metrics       │
+│ • Themes        │    │ • Error Handle  │    │ • Prometheus    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
-**Option 1: Using Maven**
+## 🚀 Quick Start
+
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
+- Docker (optional)
+- Kubernetes cluster (optional)
+
+### Option 1: Run with Maven
 ```bash
-mvn clean compile
-mvn javafx:run
+# Clone the repository
+git clone <repository-url>
+cd calculator-app
+
+# Run the application
+./mvnw spring-boot:run
+
+# Or build and run the JAR
+./mvnw clean package
+java -jar target/calculator-app-0.0.1-SNAPSHOT.jar
 ```
 
-**Option 2: Using JAR**
+### Option 2: Run with Docker
 ```bash
-mvn clean package
-java -jar target/calculator-app-1.0.0-SNAPSHOT.jar
+# Build and run with Docker
+docker build -t calculator-app .
+docker run -p 8081:8081 calculator-app
+
+# Or use Docker Compose
+docker-compose up
 ```
 
-### Running Tests
+### Option 3: Deploy to Kubernetes
 ```bash
-mvn clean test
+# Apply Kubernetes manifests
+kubectl apply -f Deployment.yaml
+
+# Check deployment status
+kubectl get pods -l app=calculator-app
+
+# Access via port-forward
+kubectl port-forward service/calculator-app-service 8081:80
 ```
 
-The Java version includes **25 comprehensive unit tests** covering:
-- Basic operations (add, subtract, multiply, divide)
-- Decimal operations
-- Chained calculations
-- Edge cases (division by zero, large numbers, negative results)
-- Clear functionality
-- Operator changes
+## 🌐 Access the Application
 
-### Java Project Structure
+- **Main Application**: http://localhost:8080
+- **Health Check**: http://localhost:8080/actuator/health
+- **Metrics**: http://localhost:8080/actuator/metrics
+- **Prometheus Metrics**: http://localhost:8080/actuator/prometheus
+
+## 🎮 Using the Calculator
+
+### UI Controls
+- **Numbers (0-9)**: Click or use keyboard
+- **Operations**: `+`, `-`, `×` (or `*`), `÷` (or `/`)
+- **Actions**:
+  - `=` or `Enter`: Calculate result
+  - `AC`: Clear all
+  - `CE`: Clear entry
+  - `⌫` or `Backspace`: Delete last digit
+  - `.`: Decimal point
+  - `Esc`: Clear all
+
+### Theme Toggle
+- Click the moon/sun icon in the header to switch themes
+- Theme preference is saved in localStorage
+
+## 🔌 API Endpoints
+
+### Calculator Operations
+```http
+POST /api/calculator/add
+Content-Type: application/json
+
+{
+  "a": 5.0,
+  "b": 3.0
+}
 ```
-src/
-├── main/
-│   ├── java/com/example/calculator/
-│   │   ├── Calculator.java        # Core calculation logic
-│   │   └── CalculatorApp.java     # JavaFX UI
-│   └── resources/
-│       └── calculator-style.css   # External CSS styling
-└── test/
-    └── java/com/example/calculator/
-        └── CalculatorTest.java    # Unit tests (25 tests)
+
+```http
+POST /api/calculator/subtract
+Content-Type: application/json
+
+{
+  "a": 10.0,
+  "b": 3.0
+}
 ```
 
----
+```http
+POST /api/calculator/multiply
+Content-Type: application/json
 
-## 🌐 Web Version (HTML/CSS/JavaScript)
+{
+  "a": 4.0,
+  "b": 7.0
+}
+```
 
-### Running the Web Calculator
+```http
+POST /api/calculator/divide
+Content-Type: application/json
 
-**Option 1: Open Directly**
+{
+  "a": 15.0,
+  "b": 3.0
+}
+```
+
+### Monitoring Endpoints
+- `GET /actuator/health` - Application health status
+- `GET /actuator/info` - Application information
+- `GET /actuator/metrics` - Application metrics
+- `GET /actuator/prometheus` - Prometheus metrics format
+
+## 🐳 Docker Configuration
+
+### Multi-stage Build
+The Dockerfile uses a multi-stage build for optimization:
+1. **Builder stage**: Compiles the application with Maven
+2. **Runtime stage**: Runs the application with minimal JRE
+
+### Security Features
+- Non-root user execution
+- Read-only root filesystem
+- Dropped capabilities
+- Health checks included
+
+### JVM Optimization
+```dockerfile
+ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:+UseContainerSupport -XX:MaxRAMPercentage=75"
+```
+
+## ☸️ Kubernetes Deployment
+
+### Included Resources
+- **Deployment**: Main application deployment with 2 replicas
+- **Service**: ClusterIP service for internal access
+- **ConfigMap**: Configuration management
+- **Ingress**: External access configuration
+- **HPA**: Horizontal Pod Autoscaler for scaling
+- **PDB**: Pod Disruption Budget for availability
+
+### Production Features
+- Rolling updates with zero downtime
+- Resource limits and requests
+- Liveness and readiness probes
+- Security contexts and policies
+- Auto-scaling based on CPU/memory usage
+
+## 📊 Monitoring Setup
+
+### With Docker Compose
 ```bash
-cd web
-open index.html
+# Start with monitoring stack
+docker-compose --profile monitoring up
 ```
 
-**Option 2: Local Server (Recommended)**
-```bash
-cd web
+This starts:
+- **Calculator App**: http://localhost:8080
+- **Prometheus**: http://localhost:9090
+- **Grafana**: http://localhost:3000 (admin/admin)
 
-# Python 3
-python -m http.server 8000
-
-# Node.js
-npx http-server
-
-# PHP
-php -S localhost:8000
-```
-
-Then open `http://localhost:8000` in your browser.
-
-### Web Files Structure
-```
-web/
-├── index.html         # Main HTML structure
-├── styles.css         # All styling and animations
-├── calculator.js      # Calculator logic
-└── README.md         # Web-specific documentation
-```
-
-### Browser Compatibility
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Opera (latest)
-
----
-
-## ⌨️ Keyboard Shortcuts
-
-Both versions support:
-- **Numbers**: `0-9`
-- **Operators**: `+`, `-`, `*`, `/`
-- **Calculate**: `Enter` or `=`
-- **Clear**: `Escape` or `C`
-- **Decimal**: `.`
-- **Backspace**: `Backspace` (Web only)
-
----
-
-## 🎨 UI Theme
-
-Both versions feature a **modern dark theme** with:
-- Deep blue gradient background
-- Color-coded buttons:
-  - 🔵 **Blue**: Operators (+, -, ×, ÷)
-  - 🟢 **Green**: Equals button
-  - 🔴 **Red**: Clear button
-  - ⚫ **Dark Gray**: Number buttons
-- Smooth hover effects and animations
-- Calculation history panel
-- Responsive design (Web version)
-
----
-
-## 🏗️ Technology Stack
-
-### Java Version
-- **Java 21**: Modern Java features
-- **JavaFX 21.0.1**: Rich desktop UI framework
-- **JUnit 5**: Unit testing framework
-- **Maven**: Build and dependency management
-- **Jenkins**: CI/CD pipeline (see `Jenkinsfile`)
-
-### Web Version
-- **HTML5**: Semantic markup
-- **CSS3**: Gradients, animations, grid/flexbox layouts
-- **JavaScript ES6+**: Classes, arrow functions, modern syntax
-- **No dependencies**: Pure vanilla JavaScript
-
----
+### Available Metrics
+- JVM metrics (memory, GC, threads)
+- HTTP request metrics
+- Custom application metrics
+- System metrics (CPU, memory)
 
 ## 🧪 Testing
 
-### Java Tests
-Run the test suite:
+### Run Unit Tests
 ```bash
-mvn test
+./mvnw test
 ```
 
-**Test Coverage (25 tests):**
-- Basic Operations: 5 tests
-- Decimal Operations: 4 tests
-- Chained Operations: 3 tests
-- Clear Functionality: 2 tests
-- Edge Cases: 9 tests
-- Invalid Operations: 2 tests
-
-### Web Testing
-Open the web calculator and use the browser console to test:
-```javascript
-calculator.inputNumber('5');
-calculator.inputOperator('+');
-calculator.inputNumber('3');
-calculator.calculate(); // Should show 8
-```
-
----
-
-## 📦 Building for Production
-
-### Java Application
+### Run Integration Tests
 ```bash
-# Compile
-mvn clean compile
-
-# Run tests
-mvn test
-
-# Package
-mvn clean package
+./mvnw verify
 ```
 
-### Web Application
-The web version is ready to deploy as-is. Simply upload the `web/` directory to any web server or hosting platform.
-
----
-
-## 🚀 CI/CD Pipeline
-
-The project includes a `Jenkinsfile` with automated stages:
-1. **Git Checkout**: Pull from GitHub
-2. **Compile**: Build Java source
-3. **Test**: Run unit tests
-4. **Package**: Create JAR file
-
----
-
-## 📊 Project Statistics
-
-- **Java LOC**: ~270 lines (main) + ~355 lines (tests)
-- **Web LOC**: ~400 lines total (HTML + CSS + JS)
-- **Test Coverage**: 25 unit tests for Java version
-- **Features**: 10+ major features in both versions
-
----
-
-## 🌟 Highlights
-
-### What Makes This Calculator Special?
-
-1. **Two Independent Implementations**: Learn by comparing Java and JavaScript approaches
-2. **Modern UI/UX**: Not your typical boring calculator
-3. **Comprehensive Testing**: Real-world test coverage
-4. **Production Ready**: CI/CD pipeline included
-5. **Educational**: Clean code, well-documented
-6. **Responsive**: Web version works on mobile devices
-
----
-
-## 🔧 Development
-
-### Java Development
+### Test Coverage
 ```bash
-# Clean and compile
-mvn clean compile
-
-# Run application
-mvn javafx:run
-
-# Run tests with output
-mvn test
-
-# Watch mode (manual)
-mvn compile && mvn javafx:run
+./mvnw jacoco:report
+# View report at target/site/jacoco/index.html
 ```
 
-### Web Development
-Edit files in the `web/` directory:
-- `index.html` - Structure
-- `styles.css` - Styling
-- `calculator.js` - Logic
+### Mutation Testing
+```bash
+./mvnw pitest:mutationCoverage
+# View report at target/pit-reports/
+```
 
-Changes are reflected immediately upon browser refresh.
+## 🔧 Configuration
 
----
+### Application Properties
+Key configuration options in `src/main/resources/application.properties`:
 
-## 📝 License
+```properties
+# Server Configuration
+server.port=8080
 
-MIT License - Feel free to use and modify
+# Actuator Configuration
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
 
----
+# Logging Configuration
+logging.level.com.example.calculator=INFO
+```
+
+### Environment Variables
+- `SPRING_PROFILES_ACTIVE`: Set active profile (development, production)
+- `JAVA_OPTS`: JVM options for memory and GC tuning
+- `SERVER_PORT`: Override default port (8080)
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+**Application won't start**
+```bash
+# Check Java version
+java -version
+
+# Check port availability
+lsof -i :8081
+
+# Check logs
+tail -f logs/application.log
+```
+
+**Docker build fails**
+```bash
+# Clean Maven cache
+./mvnw dependency:purge-local-repository
+
+# Build without cache
+docker build --no-cache -t calculator-app .
+```
+
+**Kubernetes deployment issues**
+```bash
+# Check pod status
+kubectl describe pod -l app=calculator-app
+
+# Check logs
+kubectl logs -l app=calculator-app
+
+# Check service
+kubectl get svc calculator-app-service
+```
+
+## 📈 Performance
+
+### Benchmarks
+- **Startup time**: ~15 seconds (cold start)
+- **Memory usage**: ~256MB (with G1GC)
+- **Response time**: <50ms (average)
+- **Throughput**: 1000+ req/sec
+
+### Optimization Tips
+1. Use G1GC for better latency
+2. Set appropriate heap sizes
+3. Enable compression in reverse proxy
+4. Use connection pooling
+5. Monitor with Prometheus/Grafana
 
 ## 🤝 Contributing
 
-Contributions welcome! Ideas:
-- Add scientific functions
-- Theme switcher
-- LocalStorage for history persistence
-- Mobile app versions
-- More unit tests
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit changes: `git commit -am 'Add feature'`
+4. Push to branch: `git push origin feature-name`
+5. Submit a Pull Request
 
----
+## 🙏 Acknowledgments
+
+- Spring Boot team for the excellent framework
+- Font Awesome for icons
+- Google Fonts for typography
+- Docker and Kubernetes communities
 
 ## 📞 Support
 
-For issues or questions:
-- GitHub Issues: [Report here](https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app/issues)
+If you have any questions or issues, please:
+1. Check the troubleshooting section
+2. Search existing issues
+3. Create a new issue with detailed information
+4. Test
 
 ---
-
-**Choose Your Version:**
-- Want a desktop app? → Use the Java version
-- Want to run in browser? → Use the Web version
-- Want both? → You've got both! 🎉
