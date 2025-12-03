@@ -323,15 +323,12 @@ class CalculatorTest {
     @Test
     @DisplayName("Should throw exception for invalid operator during calculation")
     void testInvalidOperator() {
-        // Build an invalid expression 5 % 3 and verify calculation throws
-        assertThrows(IllegalArgumentException.class, () ->
-                calc.calculate(
-                        calc.inputDigit(
-                                calc.setOperator("5", "%"),
-                                '3'
-                        )
-                )
-        );
+        // Build expression with invalid operator and verify it throws
+        Calculator testCalc = new Calculator();
+        final String step1 = testCalc.setOperator("5", "%");
+        final String step2 = testCalc.inputDigit(step1, '3');
+
+        assertThrows(IllegalArgumentException.class, () -> testCalc.calculate(step2));
     }
 
     @Test
