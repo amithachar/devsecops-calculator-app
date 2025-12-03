@@ -64,6 +64,21 @@
                 </configuration>
             </plugin>
 
+            <!-- JAR plugin to set Main-Class in manifest -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.calculator.CalculatorApp</mainClass>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
             <!-- JavaFX Maven plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
