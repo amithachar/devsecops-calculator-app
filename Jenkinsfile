@@ -54,14 +54,24 @@ pipeline {
             }
         }  
 
-        stage('Sonar-Qube-Analysis'){
-            steps{
-                sh '''
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=cal-app \
-                    -Dsonar.host.url=http://34.220.193.218:9000 \
-                    -Dsonar.login=b9f45956612ec722b9471af172f8f74cec8ac6bd
-                '''
+        // stage('Sonar-Qube-Analysis'){
+        //     steps{
+        //         sh '''
+        //             mvn sonar:sonar \
+        //             -Dsonar.projectKey=cal-app \
+        //             -Dsonar.host.url=http://34.220.193.218:9000 \
+        //             -Dsonar.login=b9f45956612ec722b9471af172f8f74cec8ac6bd
+        //         '''
+        //     }
+        // }
+        stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven 3.9.6') {
+                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                    }
+                }
             }
         }
 
