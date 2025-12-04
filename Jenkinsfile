@@ -58,9 +58,9 @@ pipeline {
             steps{
                 sh '''
                     mvn sonar:sonar \
-                        -Dsonar.projectKey=cal-app \
-                        -Dsonar.host.url=http://44.247.38.123:9000 \
-                        -Dsonar.login=9bc4cbb7d017932545e885e7449cbe99648a61cd
+                    -Dsonar.projectKey=cal-app \
+                    -Dsonar.host.url=http://34.220.193.218:9000 \
+                    -Dsonar.login=b9f45956612ec722b9471af172f8f74cec8ac6bd
                 '''
             }
         }      
