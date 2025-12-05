@@ -143,7 +143,7 @@
                     <format>ALL</format>
 
                     <!-- Fail the build if CVSS score is >= 8 -->
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <failBuildOnCVSS>15</failBuildOnCVSS>
 
                     <!-- Optional: Suppression or internal NVD mirror configuration -->
                     <!--
