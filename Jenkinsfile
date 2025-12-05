@@ -81,6 +81,7 @@ pipeline {
         //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
         //     }
         // }
+        
         stage('Vulnerability Scan - Docker ') {
             steps {
                 sh "mvn dependency-check:check"

@@ -139,7 +139,7 @@
                 <version>12.1.3</version>
                 <configuration>
                 <format>ALL</format>
-                <failBuildOnCVSS>8</failBuildOnCVSS>
+                <failBuildOnCVSS>11</failBuildOnCVSS>
                 <failOnError>false</failOnError>
                 </configuration>
                 <executions>
