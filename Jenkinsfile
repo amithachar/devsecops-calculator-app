@@ -83,12 +83,24 @@ pipeline {
         // }
 
 
-        stage('Trivy Base Image Scan') {
-            steps {
+        stage('Vulnerabilities Scan - OWASP & Trivy') {
+            parallel {
+
+                stage('Trivy Base Image Scan') {
+                    steps {
                         sh 'bash trivy-docker-image-scan.sh'
                     }
+                }
+
+                stage('OPA confest'){
+                    steps{
+                      sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'  
+                    }
+                }
+
+            }
         }
-        
+
         stage('Docker Image Creation') {
             steps {
                 sh '''
