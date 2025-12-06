@@ -64,24 +64,31 @@ pipeline {
             }
         }
 
-        stage('Vulnerabilities Scan - OWASP & Trivy') {
-            parallel {
+        // stage('Vulnerabilities Scan - OWASP & Trivy') {
+        //     parallel {
 
-                stage('OWASP Dependency Check') {
-                    steps {
-                        sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
-                    }
-                }
+        //         stage('OWASP Dependency Check') {
+        //             steps {
+        //                 sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+        //             }
+        //         }
 
-                stage('Trivy Base Image Scan') {
-                    steps {
+        //         stage('Trivy Base Image Scan') {
+        //             steps {
+        //                 sh 'bash trivy-docker-image-scan.sh'
+        //             }
+        //         }
+
+        //     }
+        // }
+
+
+        stage('Trivy Base Image Scan') {
+            steps {
                         sh 'bash trivy-docker-image-scan.sh'
                     }
-                }
-
-            }
         }
-
+        
         stage('Docker Image Creation') {
             steps {
                 sh '''
