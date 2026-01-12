@@ -88,69 +88,6 @@
                 </configuration>
             </plugin>
 
-            <!-- JaCoCo plugin for unit test coverage -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
-                <executions>
-                    <!-- Prepare agent before tests -->
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- Generate coverage report after tests -->
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- PITest Mutation Testing Plugin -->
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>1.5.0</version>
-                <dependencies>
-                    <dependency>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-junit5-plugin</artifactId>
-                    <version>0.12</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <mutationThreshold>70</mutationThreshold>
-                    <outputFormats>
-                    <outputFormat>XML</outputFormat>
-                    <outputFormat>HTML</outputFormat>
-                    </outputFormats>
-                </configuration>
-            </plugin>
-            <!-- OWASP PULGIN Plugin -->
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>12.1.3</version>
-                <configuration>
-                <format>ALL</format>
-                <failBuildOnCVSS>11</failBuildOnCVSS>
-                <failOnError>false</failOnError>
-                </configuration>
-                <executions>
-                <execution>
-                    <phase>verify</phase>
-                    <goals>
-                    <goal>check</goal>
-                    </goals>
-                </execution>
-                </executions>
-            </plugin>
 
 
             <!-- Compiler Plugin for Java 17 -->
