@@ -27,6 +27,11 @@ pipeline{
             steps{
                 sh 'mvn clean package'
             }
+        }
+        stage('code coverage'){
+            steps{
+                sh 'mvn jacoco:report'
+            }
         }              
     }
 }
