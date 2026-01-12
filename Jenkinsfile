@@ -43,7 +43,7 @@ pipeline{
                 }
             }
         }
-        stage('Package'){
+        stage('Sonar-qube-scan'){
             steps{
                 sh '''
                     mvn sonar:sonar \
