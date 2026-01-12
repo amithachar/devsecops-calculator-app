@@ -45,13 +45,13 @@ pipeline{
         }
         stage('Sonar-qube-scan'){
             steps{
-                sh '''
+                sh """
                     mvn sonar:sonar \
-                        -Dsonar.projectKey=devsecops-cal \
-                        -Dsonar.host.url=http://34.209.102.67:9000 \
-                        -Dsonar.login=03672f816998b463488f32a50996b6e5bb543bec
+                    -Dsonar.projectKey=devsecops-cal \
+                    -Dsonar.host.url=http://34.209.102.67:9000 \
+                    -Dsonar.login=03672f816998b463488f32a50996b6e5bb543bec
 
-                '''
+                """
             }
         }           
     }

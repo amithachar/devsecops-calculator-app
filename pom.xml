@@ -87,7 +87,7 @@
                     </jvmArguments>
                 </configuration>
             </plugin>
-            
+
             <!-- JaCoCo plugin for unit test coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -111,6 +111,16 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Sonar plugin for unit test coverage -->   
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.10.0.2594</version>
+                </plugin>
+            </plugins>
+     
 
 
             <!-- Compiler Plugin for Java 17 -->
