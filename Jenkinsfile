@@ -43,15 +43,26 @@ pipeline{
                 }
             }
         }
-        stage('Sonar-qube-scan'){
-            steps{
-                sh """
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=dev-cal \
-                    -Dsonar.host.url=http://44.246.164.160:9000 \
-                    -Dsonar.login=2cd82092a2d65f363c54f752f8e42295b7c268d6
+        // stage('Sonar-qube-scan'){
+        //     steps{
+        //         sh """
+        //             mvn sonar:sonar \
+        //             -Dsonar.projectKey=dev-cal \
+        //             -Dsonar.host.url=http://44.246.164.160:9000 \
+        //             -Dsonar.login=2cd82092a2d65f363c54f752f8e42295b7c268d6
 
-                """
+        //         """
+        //     }
+        // } 
+
+        stage('SonarQube Analysis'){
+            steps{
+                script{
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+
+                    }
+                }
             }
         }           
     }
