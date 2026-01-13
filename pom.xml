@@ -101,7 +101,25 @@
             <artifactId>sonar-maven-plugin</artifactId>
             <version>3.10.0.2594</version>
         </plugin>
-
+            <!-- OWASP PULGIN Plugin -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.1.3</version>
+                <configuration>
+                <format>ALL</format>
+                <failBuildOnCVSS>11</failBuildOnCVSS>
+                <failOnError>false</failOnError>
+                </configuration>
+                <executions>
+                <execution>
+                    <phase>verify</phase>
+                    <goals>
+                    <goal>check</goal>
+                    </goals>
+                </execution>
+                </executions>
+            </plugin>
         <!-- Compiler Plugin for Java 17 -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>

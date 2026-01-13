@@ -73,6 +73,24 @@ pipeline{
                             waitForQualityGate abortPipeline: true
                         }
                     }
-                }          
+            }  
+
+        stage('Vulnerabilities Scan - OWASP & Trivy') {
+            parallel {
+
+                stage('OWASP Dependency Check') {
+                    steps {
+                        sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+                    }
+                }
+
+                // stage('Trivy Base Image Scan') {
+                //     steps {
+                //         sh 'bash trivy-docker-image-scan.sh'
+                //     }
+                // }
+
+            }
+        }                
     }
 }
