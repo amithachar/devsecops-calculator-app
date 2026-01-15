@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
     agent any
 
     tools {
@@ -6,99 +6,83 @@ pipeline{
         maven 'maven'
     }
 
-    stages{
-        stage('Git-checkout'){
-            steps{
-                git url: 'https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app.git', branch: 'batch-2026'
-            }     
+    environment{
+        IMAGE_NAME = "manojkrishnappa/dev-sec-ops:${GIT_COMMIT}"
+    }
+    stages {
+
+        stage('Git Checkout') {
+            steps {
+                git url: 'https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app.git',
+                    branch: 'batch-2026'
+            }
         }
 
-        stage('compile'){
-            steps{
-                sh 'mvn clean compile'
+        stage('Compile') {
+            steps {
+                sh 'mvn compile'
             }
         }
-        stage('test'){
-            steps{
-                sh 'mvn clean test'
+
+        stage('Test & Coverage') {
+            steps {
+                sh 'mvn test jacoco:report'
             }
-        }  
-        stage('Package'){
-            steps{
-                sh 'mvn clean package'
-            }
-        }
-        stage('code coverage'){
-            steps{
-                sh 'mvn jacoco:report'
-            }
-            post{
-                always{
+            post {
+                always {
                     jacoco(
                         execPattern: '**/target/jacoco.exec',
                         classPattern: '**/target/classes',
                         sourcePattern: '**/src/main/java',
-                        inclusionPattern: '**/*.class' 
+                        inclusionPattern: '**/*.class'
                     )
                 }
             }
         }
-        // stage('Sonar-qube-scan'){
-        //     steps{
-        //         sh """
-        //             mvn sonar:sonar \
-        //             -Dsonar.projectKey=dev-cal \
-        //             -Dsonar.host.url=http://44.246.164.160:9000 \
-        //             -Dsonar.login=2cd82092a2d65f363c54f752f8e42295b7c268d6
 
-        //         """
-        //     }
-        // } 
-                stage('SonarQube Analysis'){
-                    steps{
-                        script{
-                            withSonarQubeEnv('SonarQube') {
-                                sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+        stage('Package') {
+            steps {
+                sh 'mvn package -DskipTests'
+            }
+        }
 
-                            }
-                        }
-                    }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
                 }
+            }
+        }
 
-            stage("Quality Gate") {
-                    steps {
-                        timeout(time: 1, unit: 'HOURS') {
-                            // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                            // true = set pipeline to UNSTABLE, false = don't
-                            waitForQualityGate abortPipeline: true
-                        }
-                    }
-            }  
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
-        stage('Vulnerabilities Scan - OWASP & Trivy') {
+        stage('Vulnerability Scan') {
             parallel {
 
+                // Uncomment if OWASP plugin is configured
                 // stage('OWASP Dependency Check') {
                 //     steps {
-                //         sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+                //         sh 'mvn org.owasp:dependency-check-maven:check'
                 //     }
                 // }
 
-                stage('Trivy Base Image Scan') {
+                stage('Trivy Image Scan') {
                     steps {
                         sh 'bash trivy-docker-image-scan.sh'
                     }
                 }
-
             }
-        }  
-  
-        stage('Docker-Image-Build'){
-            steps{
-                sh '''
-                docker build -t dev-cal-app .
-                
-                '''
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME} .'
             }
         }
     }
