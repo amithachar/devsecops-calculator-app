@@ -91,6 +91,12 @@ pipeline{
                 }
 
             }
-        }                
+        }  
+  
+        stage('Docker-Image-Build'){
+            steps{
+                docker build -t dev-cal-app .
+            }
+        }
     }
 }
