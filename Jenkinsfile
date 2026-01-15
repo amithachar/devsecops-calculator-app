@@ -84,11 +84,11 @@ pipeline{
                 //     }
                 // }
 
-                // stage('Trivy Base Image Scan') {
-                //     steps {
-                //         sh 'bash trivy-docker-image-scan.sh'
-                //     }
-                // }
+                stage('Trivy Base Image Scan') {
+                    steps {
+                        sh 'bash trivy-docker-image-scan.sh'
+                    }
+                }
 
             }
         }                
