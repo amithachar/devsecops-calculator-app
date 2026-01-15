@@ -95,7 +95,10 @@ pipeline{
   
         stage('Docker-Image-Build'){
             steps{
+                sh '''
                 docker build -t dev-cal-app .
+                
+                '''
             }
         }
     }
