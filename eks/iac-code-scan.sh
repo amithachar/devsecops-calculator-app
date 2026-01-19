@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "authentication with snyk"
+synk auth "$SNYK_TOKEN"
+
+echo "succesfuly authenticated..."
+
+echo "Running snyk test"
+snyk iac test . --severity-threshold=high || {
+    echo "Critical vulnarabilties found please check the code"
+    exit 1
+}
+
+echo "No critical vulnarabilties found"

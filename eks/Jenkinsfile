@@ -6,6 +6,7 @@ pipeline{
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
 
     agent any
@@ -15,12 +16,17 @@ pipeline{
             steps{
                 script{
                     dir("terraform"){
-                        git url: 'https://github.com/ManojKRISHNAPPA/Itkannadigaru-chatbot.git',branch: 'Iac-devenv'
+                        git url: 'https://github.com/ManojKRISHNAPPA/devsecops-1311-cal-app.git',branch: 'IAC-scan'
                     }
                 }
             }
         }
 
+        stage(Snyk Security Scan){
+            steps{
+                sh './iac-code-scan.sh'
+            }
+        }
         stage('Plan'){
             steps{
                 sh 'pwd; cd eks/; terraform init'
