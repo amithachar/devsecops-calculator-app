@@ -22,7 +22,7 @@ pipeline{
             }
         }
 
-        stage(Snyk Security Scan){
+        stage('Snyk Security Scan'){
             steps{
                 sh './iac-code-scan.sh'
             }
