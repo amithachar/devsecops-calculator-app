@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "authentication with snyk"
-synk auth "$SNYK_TOKEN"
+snyk auth "$SNYK_TOKEN"
 
 echo "succesfuly authenticated..."
 
