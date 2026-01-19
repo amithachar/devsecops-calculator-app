@@ -80,7 +80,7 @@ pipeline {
 
                 stage('OPA CONFTEST'){
                     steps{
-                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile' 
+                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile-multistage' 
                     }
                 }
             }
@@ -88,7 +88,7 @@ pipeline {
 
         stage('Docker Image Build') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME} .'
+                sh 'docker build -t ${IMAGE_NAME} -f Dockerfile-multistage .'
             }
         }
     }
