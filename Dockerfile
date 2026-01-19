@@ -1,5 +1,13 @@
-FROM eclipse-temurin:17-jdk
+
+FROM eclipse-temurin:17-jre as installer
 WORKDIR /app
 COPY . .
+RUN chmod 777 run-with-add-opens.sh
+
+FROM eclipse-temurin:17-jre
+COPY --from=installer /app .
+RUN useradd -m -s /bin/bash appuser
+RUN chown -R appuser:appuser /app
+USER appuser
 EXPOSE 8081
 ENTRYPOINT [ "./run-with-add-opens.sh" ]
