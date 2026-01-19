@@ -78,7 +78,7 @@ pipeline {
                     }
                 }
 
-                stgae('OPA CONFTEST'){
+                stage('OPA CONFTEST'){
                     steps{
                         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile' 
                     }
