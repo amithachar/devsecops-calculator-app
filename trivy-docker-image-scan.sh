@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dockerimage=$(cat Dockerfile | grep "FROM" | awk '{print $2}')
+dockerimage=$(cat Dockerfile | grep "FROM" | awk '{print $2}' |sort -u)
 echo "Docker image: $dockerimage"
 
 
