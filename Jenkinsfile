@@ -107,7 +107,7 @@ pipeline {
 
         stage('Dockehub'){
             steps{
-               sh 'doker push ${IMAGE_NAME}'
+               sh 'docker push ${IMAGE_NAME}'
             }
         }
 
