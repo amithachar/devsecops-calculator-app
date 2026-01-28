@@ -9,7 +9,7 @@ pipeline{
 	stages {
 	   stage ('Git-checkout') {
 	     steps{
-	        git url: 'https://github.com/amithachar/devsecops-calculator-app/blob/main/Jenkinsfile' , branch : 'main'
+	        git url: 'https://github.com/amithachar/devsecops-calculator-app.git' , branch : 'main'
 	     }
 	   }
 
