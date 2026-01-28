@@ -14,23 +14,23 @@ pipeline{
 	   }
 
 	   stage ('compile') {
-	     steps{
-	        sh 'mvn clean compile'
-	     }
+	      steps{
+	           sh 'mvn clean compile'
+	      }
 	   }
 	   stage ('test') {
-	    steps{
-	        sh 'mvn clean test'
-	    }
+	      steps{
+	           sh 'mvn clean test'
+	      }
 	   }
 	   stage ('package') {
 	    steps{
-           sh 'mvn clean package'
+               sh 'mvn clean package'
 	   }
        stage ('Jacoco Report') {
 	    steps{
            sh 'mvn jacoco:report'
-	   }
+	   }    
        post{
         always{
           jacoco execPattern: '**/target/jacoco.exec', 
@@ -39,6 +39,6 @@ pipeline{
           inclusionPattern: '**/*.class'
         }
        }
-	   }
+	  }
 	}
 }
