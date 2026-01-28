@@ -27,6 +27,18 @@ pipeline{
 	    steps{
            sh 'mvn clean package'
 	   }
+       stage ('Jacoco Report') {
+	    steps{
+           sh 'mvn jacoco:report'
+	   }
+       post{
+        always{
+          jacoco execPattern: '**/target/jacoco.exec', 
+          classPattern: '**/target/classes', 
+          sourcePattern: '**/src/main/java', 
+          inclusionPattern: '**/*.class'
+        }
+       }
 	   }
 	}
 }
