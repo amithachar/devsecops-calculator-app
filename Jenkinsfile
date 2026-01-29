@@ -40,6 +40,16 @@ pipeline{
           inclusionPattern: '**/*.class'
         }
        }
-	  }
+	   }
+	   stage ('Sonarqube SAST scan') {
+		steps{
+              sh '''
+			  mvn sonar:sonar \
+              -Dsonar.projectKey=devsecops \
+              -Dsonar.host.url=http://65.0.92.80:9000 \
+              -Dsonar.login=89a313a97e583d383145e9e82d01bf51b3e011d7
+               '''
+
+		}  
 	}
 }
