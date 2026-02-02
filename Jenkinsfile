@@ -16,17 +16,17 @@ pipeline{
 	   stage ('compile') {
 	      steps{
 	           sh 'mvn clean compile'
-	      }
+	           }
 	   }
 	   stage ('test') {
 	      steps{
 	           sh 'mvn clean test'
-	      }
+	           }
 	   }
 	   stage ('package') {
 	    steps{
                sh 'mvn clean package'
-	   }
+	         }
        }
        stage ('Jacoco Report') {
 	    steps{
@@ -41,15 +41,25 @@ pipeline{
         }
        }
 	   }
-	   stage ('Sonarqube SAST scan') {
-		steps{
-              sh '''
-			  mvn sonar:sonar \
-              -Dsonar.projectKey=devsecops \
-              -Dsonar.host.url=http://13.234.115.244:9000 \
-              -Dsonar.login=39ba82e5d30643d41961780227aa115eae91ff13
-		     '''
+//	   stage ('Sonarqube SAST scan') {
+//		steps{
+//              sh '''
+//			  mvn sonar:sonar \
+//              -Dsonar.projectKey=devsecops \
+//              -Dsonar.host.url=http://13.234.115.244:9000 \
+//              -Dsonar.login=39ba82e5d30643d41961780227aa115eae91ff13
+//		     '''
+//             }  
+//		}
+
+	    stage ('Sonarqube Analysis') {
+		 steps{
+              script {
+				withSonarQubeEnv('SonarQube') {
+					sh'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'   
+	                 }
+		            }
              }  
-		}
+		}		
    }
 }
