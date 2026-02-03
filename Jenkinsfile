@@ -46,7 +46,7 @@ pipeline{
 //              sh '''
 //			  mvn sonar:sonar \
 //              -Dsonar.projectKey=devsecops \
-//              -Dsonar.host.url=http://13.234.115.244:9000 \
+//              -Dsonar.host.url=http://13.201.46.222:9000 \
 //              -Dsonar.login=39ba82e5d30643d41961780227aa115eae91ff13
 //		     '''
 //             }  
@@ -58,7 +58,7 @@ pipeline{
 				withSonarQubeEnv('SonarQube') {
 					sh'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'   
 	                 }
-		            }
+		        }
              }  
 		}		
    }
