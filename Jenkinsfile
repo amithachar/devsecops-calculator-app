@@ -64,7 +64,7 @@ pipeline{
              }  
 		}	
 
-        stage("Quality Gate") {
+        stage('Quality Gate') {
          steps {
              timeout(time: 1, unit: 'HOURS') {
               waitForQualityGate abortPipeline: true
@@ -77,5 +77,10 @@ pipeline{
     //                  sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
     //              }
     //          }
+
+        stage('trivy base image scan') {
+		 steps{
+			sh 'bash trivy-docker-image-scan.sh'
+		}	
    }
 }
