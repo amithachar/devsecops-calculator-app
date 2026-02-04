@@ -7,7 +7,7 @@ pipeline{
 	}
 
 	environment{
-	   IMAGE_NAME = "amithachar/devsecops-calculator-app:${GIT_COMMIT}"
+	   IMAGE_NAME = "amithachar/devsecops-calci-app:${GIT_COMMIT}"
 	}
 
 	stages {
