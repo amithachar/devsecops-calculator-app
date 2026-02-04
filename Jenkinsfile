@@ -6,6 +6,10 @@ pipeline{
 	  maven 'maven'
 	}
 
+	environment {
+	   IMAGE_NAME = 'amithachar/devsecops-calculator-app:${GIT_COMMIT}'
+	}
+
 	stages {
 	   stage ('Git-checkout') {
 	     steps{
@@ -82,6 +86,11 @@ pipeline{
 		 steps {
 			sh 'bash trivy-docker-image-scan.sh'
 		}	
-	 }
+
+        stage('Docker Image Build') {
+		 steps {
+			sh 'docker build -t ${IMAGE_NAME} .'
+		}	
+      }
    }
 }
