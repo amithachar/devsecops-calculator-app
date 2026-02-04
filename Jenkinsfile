@@ -79,8 +79,9 @@ pipeline{
     //          }
 
         stage('trivy base image scan') {
-		 steps{
+		 steps {
 			sh 'bash trivy-docker-image-scan.sh'
 		}	
+	 }
    }
 }
