@@ -6,8 +6,8 @@ pipeline{
 	  maven 'maven'
 	}
 
-	environment {
-	   IMAGE_NAME = 'amithachar/devsecops-calculator-app:${GIT_COMMIT}'
+	environment{
+	   IMAGE_NAME = "amithachar/devsecops-calculator-app:${GIT_COMMIT}"
 	}
 
 	stages {
