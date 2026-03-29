@@ -18,7 +18,7 @@ pipeline {
             steps {
                 dir("eks") {
                     git url: 'https://github.com/amithachar/devsecops-calculator-app.git',
-                        branch: 'iac-scan'
+                        branch: 'IAC-scan'
                 }
             }
         }
