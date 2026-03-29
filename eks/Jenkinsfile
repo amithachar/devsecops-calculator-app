@@ -1,86 +1,77 @@
-pipeline {
-
-    agent any
-
-    parameters {
-        choice(name: 'terraformAction', choices: ['apply', 'destroy'], description: 'Choose your terraform action')
+pipeline{
+    parameters{
+        choice(name: 'terraformAction',choices: ['apply','destroy'],description: 'Choose your terraform action')
     }
 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        SNYK_TOKEN            = credentials('SNYK_TOKEN')
+        SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
 
-    stages {
+    agent any
 
-        stage('Checkout') {
-            steps {
-                dir("eks") {
-                    git url: 'https://github.com/amithachar/devsecops-calculator-app.git',
-                        branch: 'IAC-scan'
-                }
-            }
-        }
-
-        stage('Snyk Security Scan') {
-            steps {
-                dir('eks') {
-                    sh './iac-code-scan.sh'
-                }
-            }
-        }
-
-        stage('Plan') {
-            steps {
-                dir('eks') {
-                    sh '''
-                        terraform init
-                        terraform plan -out tfplan
-                        terraform show -no-color tfplan > tfplan.txt
-                    '''
-                }
-            }
-        }
-
-        stage('Approval') {
-            steps {
-                script {
-                    def plan = readFile 'terraform/eks/tfplan.txt'
-                    input message: "Do you want to proceed?",
-                        parameters: [text(name: 'Plan', defaultValue: plan)]
-                }
-            }
-        }
-
-        stage('Apply or Destroy') {
-            when {
-                expression {
-                    params.terraformAction == 'apply' || params.terraformAction == 'destroy'
-                }
-            }
-            steps {
-                dir('terraform/eks') {
-                    script {
-                        if (params.terraformAction == 'apply') {
-                            sh 'terraform apply -input=false tfplan'
-                        } else {
-                            sh 'terraform destroy -auto-approve'
-                        }
+    stages{
+        stage('Checkout'){
+            steps{
+                script{
+                    dir("terraform"){
+                        git url: 'https://github.com/amithachar/devsecops-calculator-app.git',branch: 'IAC-scan'
                     }
                 }
             }
         }
 
-        stage('Backup-Stage') {
-            steps {
-                dir('terraform/eks') {
-                    sh '''
-                        aws s3 cp terraform.tfstate \
-                        s3://itkannadogaru-terraform-statefile-backup/Chat-bot/dev-eks/
-                    '''
+        stage('Snyk Security Scan'){
+            steps{
+                sh 'pwd; cd eks/;./iac-code-scan.sh'
+            }
+        }
+        stage('Plan'){
+            steps{
+                sh 'pwd; cd eks/; terraform init'
+                sh 'pwd; cd eks/; terraform plan -out tfplan'
+                sh 'pwd; cd eks/; terraform show -no-color tfplan > tfplan.txt'
+            }
+        }
+
+        stage('Approval'){
+            steps{
+                script{
+                    def plan = readFile 'eks/tfplan.txt'
+                    input message: "Do you want to proceed with the Terraform action?",
+                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                 }
             }
         }
+
+        stage('Apply or Destroy'){
+            when {
+                expression{
+                    return  params.terraformAction == 'apply' || params.terraformAction == 'destroy'
+                } 
+            }
+            steps{
+                script{
+                    if (params.terraformAction == 'apply'){
+                        sh 'pwd; cd eks/; terraform apply -input=false tfplan'
+                    }
+                    else if (params.terraformAction == 'destroy'){
+                        sh 'pwd; cd eks/; terraform destroy -auto-approve'
+                    }
+                }
+            }
+        }
+
+        stage('Backup-Stage'){
+            steps{
+                sh '''
+                    pwd 
+                    cd eks/
+                    aws s3 cp terraform.tfstate s3://itkannadogaru-terraform-statefile-backup/Chat-bot/dev-eks/
+                '''
+            }
+        }
     }
+
 }
