@@ -1,0 +1,21 @@
+Index: Jenkinsfile
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>pipeline{\r\n\tagent any\r\n\r\n\ttools {\r\n\t  jdk 'java-17'\r\n\t  maven 'maven'\r\n\t}\r\n\r\n\tenvironment{\r\n\t   IMAGE_NAME = \"amithachar/devsecops-calci-app:${GIT_COMMIT}\"\r\n\t}\r\n\r\n\tstages {\r\n\t   stage ('Git-checkout') {\r\n\t     steps{\r\n\t        git url: 'https://github.com/amithachar/devsecops-calculator-app.git' , branch : 'testing'\r\n\t     }\r\n\t   }\r\n\r\n\t   stage ('compile') {\r\n\t      steps{\r\n\t           sh 'mvn clean compile'\r\n\t           }\r\n\t   }\r\n\t   stage ('test') {\r\n\t      steps{\r\n\t           sh 'mvn clean test'\r\n\t           }\r\n\t   }\r\n\t   stage ('package') {\r\n\t    steps{\r\n               sh 'mvn clean package'\r\n\t         }\r\n       }\r\n       stage ('Jacoco Report') {\r\n\t    steps{\r\n           sh 'mvn jacoco:report'\r\n\t   }    \r\n       post{\r\n        always{\r\n          jacoco execPattern: '**/target/jacoco.exec', \r\n          classPattern: '**/target/classes', \r\n          sourcePattern: '**/src/main/java', \r\n          inclusionPattern: '**/*.class'\r\n        }\r\n       }\r\n\t   }\r\n//\t   stage ('Sonarqube SAST scan') {\r\n//\t\tsteps{\r\n//              sh '''\r\n//\t\t\t  mvn sonar:sonar \\\r\n//              -Dsonar.projectKey=devsecops \\\r\n//              -Dsonar.host.url=http://13.201.46.222:9000 \\\r\n//              -Dsonar.login=39ba82e5d30643d41961780227aa115eae91ff13\r\n//\t\t     '''\r\n//             }  \r\n//\t\t}\r\n\r\n\r\n\r\n\t    stage ('Sonarqube Analysis') {\r\n\t\t steps{\r\n              script {\r\n\t\t\t\twithSonarQubeEnv('SonarQube') {\r\n\t\t\t\t\tsh'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'   \r\n\t                 }\r\n\t\t        }\r\n             }  \r\n\t\t}\t\r\n\r\n        stage('Quality Gate') {\r\n         steps {\r\n             timeout(time: 1, unit: 'HOURS') {\r\n              waitForQualityGate abortPipeline: true\r\n                }\r\n             }\r\n         }\t\r\n\r\n    //    stage('OWASP Dependency Check') {\r\n    //             steps {\r\n    //                  sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'\r\n    //              }\r\n    //          }\r\n\r\n        stage('trivy base image scan') {\r\n\t\t steps {\r\n\t\t\tsh 'bash trivy-docker-image-scan.sh'\r\n\t\t}\r\n\t\t}\t\r\n\r\n        stage('Docker Image Build') {\r\n\t\t steps {\r\n\t\t\tsh 'docker build -t ${IMAGE_NAME} .'\r\n\t\t}\t\r\n      }\r\n   }\r\n}\r\n
+===================================================================
+diff --git a/Jenkinsfile b/Jenkinsfile
+--- a/Jenkinsfile	(revision 355e58d4348e6498ba291cb5dfffd65256e470dc)
++++ b/Jenkinsfile	(date 1770453715445)
+@@ -6,9 +6,9 @@
+ 	  maven 'maven'
+ 	}
+ 
+-	environment{
+-	   IMAGE_NAME = "amithachar/devsecops-calci-app:${GIT_COMMIT}"
+-	}
++//	environment{
++//	   IMAGE_NAME = "amithachar/devsecops-calci-app:${GIT_COMMIT}"
++//	}
+ 
+ 	stages {
+ 	   stage ('Git-checkout') {

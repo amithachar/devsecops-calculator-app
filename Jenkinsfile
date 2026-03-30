@@ -8,6 +8,9 @@ pipeline{
 
 	environment{
 	   IMAGE_NAME = "amithachar/devsecops-calci-app:${GIT_COMMIT}"
+        AWS_REGION = "us-west-2"
+        CLUSTER_NAME = "itkannadigaru-cluster"
+        NAMESPACE = "itkannadigaru"
 	}
 
 	stages {
@@ -88,10 +91,55 @@ pipeline{
 		}
 		}	
 
+		 stage('OPA CONFTEST'){
+                    steps{
+                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile' 
+                    }
+                } 
+
         stage('Docker Image Build') {
 		 steps {
 			sh 'docker build -t ${IMAGE_NAME} .'
 		}	
       }
-   }
+
+	          stage('Docker-Login'){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                            sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        }
+                }
+            }
+        }
+
+        stage('Dockehub'){
+            steps{
+               sh 'docker push ${IMAGE_NAME}'
+            }
+        }  
+        stage('Updating the K8 clsuter'){
+            steps{
+                sh '''
+                    aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
+                '''
+            }
+        }
+
+        stage('OPA-kubernetes'){
+            steps{
+                sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego deployment.yml'
+            }
+        }
+
+        stage('Deploying to EKS'){
+            steps{
+                withKubeConfig(caCertificate: '', clusterName: 'itkannadigaru-cluster', contextName: '', credentialsId: 'kube', namespace: 'itkannadigaru', restrictKubeConfigAccess: false, serverUrl: 'https://CA99879FAA017F0E1703499159C69075.gr7.ap-south-1.eks.amazonaws.com') {
+                    sh " sed -i 's|replace|${IMAGE_NAME}|g' deployment.yml "
+                    sh " kubectl apply -f deployment.yml -n ${NAMESPACE}"
+                }
+            }
+        }        
+
+    } 
 }
