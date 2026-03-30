@@ -8,7 +8,7 @@ pipeline{
 
 	environment{
 	   IMAGE_NAME = "amithachar/devsecops-calci-app:${GIT_COMMIT}"
-        AWS_REGION = "us-west-2"
+        AWS_REGION = "ap-south-1"
         CLUSTER_NAME = "itkannadigaru-cluster"
         NAMESPACE = "itkannadigaru"
 	}
