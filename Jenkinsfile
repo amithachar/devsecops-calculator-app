@@ -65,7 +65,7 @@ pipeline{
 		 steps{
               script {
 				withSonarQubeEnv('SonarQube') {
-					sh'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'   
+					sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'   
 	                 }
 		        }
              }  
